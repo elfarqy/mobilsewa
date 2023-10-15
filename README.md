@@ -42,6 +42,21 @@ Perform composer install
 Execute command 
 ```
 php init --env=Production --overwrite=All
+```
+
+Kemudian pindah ke directory `common/config`. Ubah file `main-local.php` 
+```
+'db' => [
+            'class' => \yii\db\Connection::class,
+            'dsn' => 'mysql:host={database host};dbname={database name}',
+            'username' => '{database user}',
+            'password' => '{database password}',
+            'charset' => 'utf8mb4',
+        ],
+```
+lalu execute command
+
+```
 php yii migrate --interactive=0
 php yii generator/data
 ```
@@ -55,3 +70,7 @@ Untuk user lain:
 
 - driver, execute command 
 `select * from user where role = 'manager'`
+
+### Api endpoint
+
+- Pada folder `docs` terdapat hasil export [insomnia](https://insomnia.rest/). Silahkan download versi terbaru, kemudian import file tersebut.
