@@ -5,7 +5,7 @@ $(document).ready(function () {
       width: "100%",
       allowClear: true,
       ajax: {
-         url: "site/manager",
+         url: $('#permissiontransportform-approvals').attr('data-url'),
          data: function (params) {
             return {
                q: params.term, // search term

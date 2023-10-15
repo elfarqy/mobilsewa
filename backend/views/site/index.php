@@ -22,7 +22,7 @@ $this->title = 'Perijinan Sewa';
         <?= $form->field($model, 'driver')
             ->dropDownList(\yii\helpers\ArrayHelper::map(\common\models\User::find()->where(['role' => 'driver'])->all(), 'id', 'username')) ?>
 
-        <?= $form->field($model, 'approvals')->dropDownList([]) ?>
+        <?= $form->field($model, 'approvals')->dropDownList([], ['data-url' => \yii\helpers\Url::to(['site/manager'])]) ?>
         <?= $form->field($model, 'tmpVal')->hiddenInput()->label(false) ?>
 
         <div class="form-group">

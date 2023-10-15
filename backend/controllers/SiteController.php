@@ -167,6 +167,11 @@ class SiteController extends Controller
     {
         $query = (new Query())->select('count(*) as max, vehicle_usage_id')->from(Approval::tableName())
             ->groupBy(['vehicle_usage_id'])->all();
+
+        if (empty($query)){
+            Yii::$app->session->setFlash('error', 'Tidak ada data');
+            return $this->redirect(['site/approval']);
+        }
         usort($query, function ($a, $b){
             return strnatcmp($a['max'], $b['max']);
         });
@@ -266,6 +271,10 @@ class SiteController extends Controller
             ->from(VehicleUsage::tableName())
             ->leftJoin('vehicle', 'vehicle.id = vehicle_usage.vehicle_id')
             ->groupBy('vehicle.name')->all();
+
+        if (empty($query)){
+            Yii::$app->session->setFlash('error', 'Tidak ada data');
+        }
 
         $request = Yii::$app->request;
         $response = Yii::$app->response;
