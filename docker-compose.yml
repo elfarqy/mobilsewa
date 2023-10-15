@@ -1,0 +1,56 @@
+version: '3.5'
+
+services:
+  ms_mysql:
+    build: ./mysql
+    container_name: "ms_mysql"
+    restart: always
+    volumes:
+      - db_data_1:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - MYSQL_ROOT_PASSWORD=random
+      - MYSQL_PASSWORD=random
+      - MYSQL_USER=mobilsewa
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 3306:3306
+    networks:
+      - ms_network
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+  ms_adminer:
+    build: ./adminer
+    container_name: "ms-adminer"
+    restart: always
+    ports:
+      - 8080:8080
+    volumes:
+      - ./adminer/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    networks:
+      - ms_network
+  ms_php:
+    build:
+      context: ./
+      dockerfile: ./php/Dockerfile  
+    container_name: "ms-php"
+    restart: always
+    ports:
+      - 8081:80
+    volumes:
+      - .:/var/www/html/
+    entrypoint: ["/bin/sh","/var/www/html/entrypoint.sh"]
+    networks:
+      - ms_network
+    depends_on:
+      ms_mysql:
+        condition: service_healthy
+
+volumes:
+  db_data_1:
+
+
+networks:
+  ms_network:
